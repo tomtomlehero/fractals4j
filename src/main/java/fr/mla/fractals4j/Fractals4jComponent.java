@@ -110,7 +110,9 @@ public class Fractals4jComponent extends JComponent implements MouseListener, Mo
 	}
 
 
-
+/* ---------------------------------------------------------
+ 	Long Mouse Press Detection
+----------------------------------------------------------*/
 	private Thread longMousePressDetectionThread;
 
 	private void startDetectingLongMousePress() {
@@ -123,7 +125,7 @@ public class Fractals4jComponent extends JComponent implements MouseListener, Mo
 						return;
 					}
 
-					System.out.println("GO !!!!!!!!!!!!!!!!!!!!");
+					onLongMousePressDetected();
 				});
 
 		this.longMousePressDetectionThread.start();
@@ -136,6 +138,10 @@ public class Fractals4jComponent extends JComponent implements MouseListener, Mo
 			this.longMousePressDetectionThread = null;
 		}
 
+	}
+
+	private void onLongMousePressDetected() {
+		System.out.println("GO !!!!!!!!!!!!!!!!!!!!");
 	}
 
 }
