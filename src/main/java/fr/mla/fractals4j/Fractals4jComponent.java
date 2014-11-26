@@ -53,19 +53,7 @@ public class Fractals4jComponent extends JComponent implements MouseListener, Mo
 		displayMouseEventInfo(e, "mousePressed");
 
 		if (e.getButton() == MouseEvent.BUTTON1) {
-
-			new Thread(
-					() -> {
-						try {
-							Thread.sleep(1000);
-						} catch (InterruptedException e1) {
-						}
-
-						System.out.print("AYET");
-					}).start();
-
-
-
+			startDetectingLongMousePress();
 		}
 
 	}
@@ -73,6 +61,11 @@ public class Fractals4jComponent extends JComponent implements MouseListener, Mo
 	@Override
 	public void mouseReleased(MouseEvent e) {
 		displayMouseEventInfo(e, "mouseReleased");
+
+		if (e.getButton() == MouseEvent.BUTTON1) {
+			stopDetectingLongMousePress();
+		}
+
 	}
 
 	@Override
@@ -99,8 +92,8 @@ public class Fractals4jComponent extends JComponent implements MouseListener, Mo
 	}
 
 	private static void displayMouseEventInfo(MouseEvent e, String label) {
-		System.out.println("### " + label + " #############");
-		System.out.println(" Button = " + e.getButton());
+//		System.out.println("### " + label + " #############");
+//		System.out.println(" Button = " + e.getButton());
 //		System.out.println(" ClickCount = " + e.getClickCount());
 //		System.out.println(" Modifiers = " + e.getModifiers());
 //		System.out.println(" ModifiersEx = " + e.getModifiersEx());
@@ -114,6 +107,35 @@ public class Fractals4jComponent extends JComponent implements MouseListener, Mo
 //		System.out.println(" Point.y = " + e.getPoint().y);
 //		System.out.println(" Component Class = " + e.getComponent().getClass().getName());
 //		System.out.println(" Source = " + e.getSource());
+	}
+
+
+
+	private Thread longMousePressDetectionThread;
+
+	private void startDetectingLongMousePress() {
+
+		this.longMousePressDetectionThread = new Thread(
+				() -> {
+					try {
+						Thread.sleep(1000);
+					} catch (InterruptedException e1) {
+						return;
+					}
+
+					System.out.println("GO !!!!!!!!!!!!!!!!!!!!");
+				});
+
+		this.longMousePressDetectionThread.start();
+
+	}
+
+	private void stopDetectingLongMousePress() {
+		if (this.longMousePressDetectionThread != null) {
+			this.longMousePressDetectionThread.interrupt();
+			this.longMousePressDetectionThread = null;
+		}
+
 	}
 
 }
