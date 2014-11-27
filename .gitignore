@@ -8,9 +8,12 @@
 *.iml
 *.iws
 
-# Mac
-.DS_Store
-
 # Maven
 log/
 target/
+
+# Mac
+.DS_Store
+
+# Windows
+*.lnk
