@@ -1,15 +1,13 @@
 package fr.mla.fractals4j;
 
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
+import java.awt.*;
+import java.awt.event.*;
 
-import javax.swing.JComponent;
+import javax.swing.*;
 
-public class Fractals4jComponent extends JComponent implements MouseListener, MouseMotionListener {
+
+// could extend JPanel either. See what's best
+public class Fractals4jComponent extends JPanel implements MouseListener, MouseMotionListener {
 
 	private static final long serialVersionUID = 1L;
 
@@ -18,14 +16,20 @@ public class Fractals4jComponent extends JComponent implements MouseListener, Mo
 
 	private FractalView fractalView;
 
+	private RegionSelectionComponent regionSelectionComponent;
+
 	public Fractals4jComponent() {
-		setPreferredSize(new Dimension(width, height));
 		addMouseListener(this);
 		addMouseMotionListener(this);
-
+		setLayout(null);
+		setBorder(BorderFactory.createLineBorder(Color.black));
 		fractalView = new FractalView(-2.0, 1.0, -1.0, 1.0, width, height, 250, "C:\\Users\\MHDB4820\\Desktop\\fractals4jWorkshop");
 		fractalView.doSomething();
 
+	}
+
+	public Dimension getPreferredSize() {
+		return new Dimension(width, height);
 	}
 
 	protected void paintComponent(Graphics g) {
@@ -38,14 +42,48 @@ public class Fractals4jComponent extends JComponent implements MouseListener, Mo
 
 	}
 
-	
-	
-	
+
+	private void startSelectingRegion(int locationX, int locationY) {
+		this.regionSelectionComponent = new RegionSelectionComponent(locationX, locationY);
+
+		this.add(this.regionSelectionComponent);
+//		this.validate();
+	}
+
+	private void continueSelectingRegion(int locationX, int locationY) {
+		if (this.regionSelectionComponent == null) {
+			return;
+		}
+
+		this.regionSelectionComponent.refreshBounds(locationX, locationY);
+
+	}
+
+	private void finishSelectingRegion() {
+
+		this.remove(this.regionSelectionComponent);
+		this.repaint(
+				this.regionSelectionComponent.getNorthEastX(),
+				this.regionSelectionComponent.getNorthEastY(),
+				this.regionSelectionComponent.getRegionW(),
+				this.regionSelectionComponent.getRegionH());
+		this.regionSelectionComponent = null;
+
+	}
+
+
+
+
+
+
+
+
+
 	// MouseListener implementation
 	
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		displayMouseEventInfo(e, "mouseClicked");
+//		displayMouseEventInfo(e, "mouseClicked");
 	}
 
 	@Override
@@ -53,29 +91,40 @@ public class Fractals4jComponent extends JComponent implements MouseListener, Mo
 		displayMouseEventInfo(e, "mousePressed");
 
 		if (e.getButton() == MouseEvent.BUTTON1) {
-			startDetectingLongMousePress();
+			startSelectingRegion(e.getX(), e.getY());
 		}
 
+//		if (e.getButton() == MouseEvent.BUTTON1) {
+//			startDetectingLongMousePress();
+//		}
+
 	}
+
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
 		displayMouseEventInfo(e, "mouseReleased");
 
 		if (e.getButton() == MouseEvent.BUTTON1) {
-			stopDetectingLongMousePress();
+			finishSelectingRegion();
 		}
+
+//		if (e.getButton() == MouseEvent.BUTTON1) {
+//			stopDetectingLongMousePress();
+//		}
 
 	}
 
+
+
 	@Override
 	public void mouseEntered(MouseEvent e) {
-		displayMouseEventInfo(e, "mouseEntered");
+//		displayMouseEventInfo(e, "mouseEntered");
 	}
 
 	@Override
 	public void mouseExited(MouseEvent e) {
-		displayMouseEventInfo(e, "mouseExited");
+//		displayMouseEventInfo(e, "mouseExited");
 	}
 
 	// MouseMotionListener implementation
@@ -83,28 +132,34 @@ public class Fractals4jComponent extends JComponent implements MouseListener, Mo
 	@Override
 	public void mouseDragged(MouseEvent e) {
 		
-		displayMouseEventInfo(e, "mouseDragged");
+//		displayMouseEventInfo(e, "mouseDragged");
+
+		if (e.getButton() == MouseEvent.BUTTON1) {
+			continueSelectingRegion(e.getX(), e.getY());
+		}
+
 	}
+
 
 	@Override
 	public void mouseMoved(MouseEvent e) {
-		displayMouseEventInfo(e, "mouseMoved");
+//		displayMouseEventInfo(e, "mouseMoved");
 	}
 
 	private static void displayMouseEventInfo(MouseEvent e, String label) {
-//		System.out.println("### " + label + " #############");
+		System.out.println("### " + label + " #############");
 //		System.out.println(" Button = " + e.getButton());
 //		System.out.println(" ClickCount = " + e.getClickCount());
 //		System.out.println(" Modifiers = " + e.getModifiers());
 //		System.out.println(" ModifiersEx = " + e.getModifiersEx());
-//		System.out.println(" X = " + e.getX());
-//		System.out.println(" Y = " + e.getY());
-//		System.out.println(" XOnScreen = " + e.getXOnScreen());
-//		System.out.println(" YOnScreen = " + e.getYOnScreen());
-//		System.out.println(" LocationOnScreen.x = " + e.getLocationOnScreen().x);
-//		System.out.println(" LocationOnScreen.y = " + e.getLocationOnScreen().y);
-//		System.out.println(" Point.x = " + e.getPoint().x);
-//		System.out.println(" Point.y = " + e.getPoint().y);
+		System.out.println(" X = " + e.getX());
+		System.out.println(" Y = " + e.getY());
+		System.out.println(" XOnScreen = " + e.getXOnScreen());
+		System.out.println(" YOnScreen = " + e.getYOnScreen());
+		System.out.println(" LocationOnScreen.x = " + e.getLocationOnScreen().x);
+		System.out.println(" LocationOnScreen.y = " + e.getLocationOnScreen().y);
+		System.out.println(" Point.x = " + e.getPoint().x);
+		System.out.println(" Point.y = " + e.getPoint().y);
 //		System.out.println(" Component Class = " + e.getComponent().getClass().getName());
 //		System.out.println(" Source = " + e.getSource());
 	}
