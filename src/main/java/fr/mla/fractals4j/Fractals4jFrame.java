@@ -2,8 +2,7 @@ package fr.mla.fractals4j;
 
 import java.awt.Dimension;
 
-import javax.swing.JFrame;
-import javax.swing.JScrollPane;
+import javax.swing.*;
 
 public class Fractals4jFrame extends JFrame {
 
@@ -11,25 +10,22 @@ public class Fractals4jFrame extends JFrame {
 
 
 	public Fractals4jFrame() {
-		
-
+		super("Fractals4j");
 		Fractals4jComponent drawing = new Fractals4jComponent();
 		getContentPane().add(new JScrollPane(drawing));
-		
-		
-		
-		setDefaultCloseOperation(EXIT_ON_CLOSE);
-		pack();
-		setVisible(true);
-		
 	}
 
 	public static void main(String[] args) {
-		new Fractals4jFrame();
+
+		SwingUtilities.invokeLater(() -> createAndShowGUI());
 	}
 
-
-
+	private static void createAndShowGUI() {
+		JFrame fractals4jFrame = new Fractals4jFrame();
+		fractals4jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		fractals4jFrame.pack();
+		fractals4jFrame.setVisible(true);
+	}
 
 
 }
