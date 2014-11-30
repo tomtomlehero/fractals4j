@@ -23,9 +23,8 @@ public class Fractals4jComponent extends JComponent implements MouseListener, Mo
 		addMouseMotionListener(this);
 		setLayout(null);
 		setBorder(BorderFactory.createLineBorder(Color.black));
-		fractalView = new FractalView(-2.0, 1.0, -1.0, 1.0, width, height, 250, "C:\\Users\\MHDB4820\\Desktop\\fractals4jWorkshop");
-		fractalView.doSomething();
 
+		this.computeAndShowFractal();
 	}
 
 	public Dimension getPreferredSize() {
@@ -61,97 +60,114 @@ public class Fractals4jComponent extends JComponent implements MouseListener, Mo
 
 	private void finishSelectingRegion() {
 
+		double x0 =
+				this.fractalView.getX0()
+						+ (this.fractalView.getX1() - this.fractalView.getX0())
+						* this.regionSelectionComponent.getNorthWestX()
+						/ width;
+
+		double x1 =
+				this.fractalView.getX0()
+						+ (this.fractalView.getX1() - this.fractalView.getX0())
+						* (this.regionSelectionComponent.getNorthWestX() + this.regionSelectionComponent.getRegionW())
+						/ width;
+
+		double y0 =
+				this.fractalView.getY1()
+						- (this.fractalView.getY1() - this.fractalView.getY0())
+						* (this.regionSelectionComponent.getNorthWestY() + this.regionSelectionComponent.getRegionH())
+						/ height;
+
+		double y1 =
+				this.fractalView.getY1()
+						- (this.fractalView.getY1() - this.fractalView.getY0())
+						* this.regionSelectionComponent.getNorthWestY()
+						/ height;
+
+
 		this.remove(this.regionSelectionComponent);
 		this.repaint(
 				this.regionSelectionComponent.getNorthWestX(),
 				this.regionSelectionComponent.getNorthWestY(),
 				this.regionSelectionComponent.getRegionW(),
 				this.regionSelectionComponent.getRegionH());
+		if (this.regionSelectionComponent.isSelectionDragged()) {
+			computeAndShowFractal(x0, x1, y0, y1);
+		}
+
 		this.regionSelectionComponent = null;
 
 	}
 
 
+	private void computeAndShowFractal() {
+		this.computeAndShowFractal(FractalView.DEFAULT_X0, FractalView.DEFAULT_X1, FractalView.DEFAULT_Y0, FractalView.DEFAULT_Y1);
+	}
 
 
+	private void computeAndShowFractal(double x0, double x1, double y0, double y1) {
 
-
-
+		SwingUtilities.invokeLater(() -> {
+			fractalView = new FractalView(x0, x1, y0, y1, width, height, 200);
+			fractalView.doSomething();
+			repaint();
+		});
+	}
 
 
 	// MouseListener implementation
 	
 	@Override
 	public void mouseClicked(MouseEvent e) {
-//		displayMouseEventInfo(e, "mouseClicked");
+		if (e.getClickCount() == 2) {
+			this.computeAndShowFractal();
+		}
 	}
 
 	@Override
 	public void mousePressed(MouseEvent e) {
-		displayMouseEventInfo(e, "mousePressed");
-
 		if (e.getButton() == MouseEvent.BUTTON1) {
 			startSelectingRegion(e.getX(), e.getY());
 		}
-
-//		if (e.getButton() == MouseEvent.BUTTON1) {
-//			startDetectingLongMousePress();
-//		}
-
 	}
 
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
-		displayMouseEventInfo(e, "mouseReleased");
-
 		if (e.getButton() == MouseEvent.BUTTON1) {
 			finishSelectingRegion();
 		}
-
-//		if (e.getButton() == MouseEvent.BUTTON1) {
-//			stopDetectingLongMousePress();
-//		}
-
 	}
-
 
 
 	@Override
 	public void mouseEntered(MouseEvent e) {
-//		displayMouseEventInfo(e, "mouseEntered");
 	}
 
 	@Override
 	public void mouseExited(MouseEvent e) {
-//		displayMouseEventInfo(e, "mouseExited");
 	}
 
 	// MouseMotionListener implementation
 	
 	@Override
 	public void mouseDragged(MouseEvent e) {
-		
-//		displayMouseEventInfo(e, "mouseDragged");
-
 		if (e.getButton() == MouseEvent.BUTTON1) {
 			continueSelectingRegion(e.getX(), e.getY());
 		}
-
 	}
 
 
 	@Override
 	public void mouseMoved(MouseEvent e) {
-//		displayMouseEventInfo(e, "mouseMoved");
 	}
 
 	private static void displayMouseEventInfo(MouseEvent e, String label) {
 		System.out.println("### " + label + " #############");
-//		System.out.println(" Button = " + e.getButton());
-//		System.out.println(" ClickCount = " + e.getClickCount());
-//		System.out.println(" Modifiers = " + e.getModifiers());
-//		System.out.println(" ModifiersEx = " + e.getModifiersEx());
+		System.out.println(" Button = " + e.getButton());
+		System.out.println(" ClickCount = " + e.getClickCount());
+		System.out.println(" Modifiers = " + e.getModifiers());
+		System.out.println(" ModifiersEx = " + e.getModifiersEx());
 		System.out.println(" X = " + e.getX());
 		System.out.println(" Y = " + e.getY());
 		System.out.println(" XOnScreen = " + e.getXOnScreen());
@@ -160,8 +176,8 @@ public class Fractals4jComponent extends JComponent implements MouseListener, Mo
 		System.out.println(" LocationOnScreen.y = " + e.getLocationOnScreen().y);
 		System.out.println(" Point.x = " + e.getPoint().x);
 		System.out.println(" Point.y = " + e.getPoint().y);
-//		System.out.println(" Component Class = " + e.getComponent().getClass().getName());
-//		System.out.println(" Source = " + e.getSource());
+		System.out.println(" Component Class = " + e.getComponent().getClass().getName());
+		System.out.println(" Source = " + e.getSource());
 	}
 
 

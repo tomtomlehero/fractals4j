@@ -14,6 +14,12 @@ import javax.imageio.ImageIO;
 
 public class FractalView {
 
+
+	public static final double DEFAULT_X0 = -2.0;
+	public static final double DEFAULT_X1 = 1.0;
+	public static final double DEFAULT_Y0 = -1.0;
+	public static final double DEFAULT_Y1 = 1.0;
+
 	private double x0 = 0.0;
 	private double x1 = 0.0;
 	private double y0 = 0.0;
@@ -28,7 +34,7 @@ public class FractalView {
 
 	private BufferedImage image;
 
-	public FractalView(double x0, double x1, double y0, double y1, int width, int height, int maxIterations, String workingDirectory) {
+	public FractalView(double x0, double x1, double y0, double y1, int width, int height, int maxIterations) {
 		this.x0 = x0;
 		this.x1 = x1;
 		this.y0 = y0;
@@ -36,7 +42,7 @@ public class FractalView {
 		this.width = width;
 		this.height = height;
 		this.maxIterations = maxIterations;
-		this.workingDirectory = workingDirectory;
+		this.workingDirectory = "C:\\Users\\MHDB4820\\Desktop\\fractals4jWorkshop";
 	}
 
 	public BufferedImage getImage() {
@@ -140,7 +146,21 @@ public class FractalView {
 	}
 
 
+	public double getX0() {
+		return x0;
+	}
 
+	public double getX1() {
+		return x1;
+	}
+
+	public double getY0() {
+		return y0;
+	}
+
+	public double getY1() {
+		return y1;
+	}
 
 	private static final int[] colorScheme = new int[]
 			{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 75, 100, 250};

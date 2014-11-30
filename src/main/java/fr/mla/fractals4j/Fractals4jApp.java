@@ -34,7 +34,7 @@ public class Fractals4jApp {
     		int maxIterations = Integer.parseInt(args[6]);
     		String workingDirectory = args[7];
 
-    		fractalView = new FractalView(x0, x1, y0, y1, width, height, maxIterations, workingDirectory);
+    		fractalView = new FractalView(x0, x1, y0, y1, width, height, maxIterations);
 
     	} catch (NumberFormatException e) {
     		usage();

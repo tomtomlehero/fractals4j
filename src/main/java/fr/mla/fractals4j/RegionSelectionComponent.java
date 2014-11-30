@@ -15,6 +15,8 @@ public class RegionSelectionComponent extends JComponent{
 
     private double aspectRatio;
 
+    private boolean selectionDragged = false;
+
     public RegionSelectionComponent(int originX, int originY, double aspectRatio) {
         this.originX = originX;
         this.originY = originY;
@@ -36,6 +38,8 @@ public class RegionSelectionComponent extends JComponent{
                 this.getNorthWestY(),
                 this.getRegionW(),
                 this.getRegionH());
+
+        this.selectionDragged = true;
 
         this.repaint();
     }
@@ -66,5 +70,10 @@ public class RegionSelectionComponent extends JComponent{
     public int getNorthWestY() {
         return (originY <= currentY ? originY : currentY);
     }
+
+    public boolean isSelectionDragged() {
+        return selectionDragged;
+    }
+
 
 }
