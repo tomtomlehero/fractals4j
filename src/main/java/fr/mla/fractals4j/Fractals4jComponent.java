@@ -157,62 +157,9 @@ public class Fractals4jComponent extends JComponent implements MouseListener, Mo
 		}
 	}
 
-
 	@Override
 	public void mouseMoved(MouseEvent e) {
 	}
 
-	private static void displayMouseEventInfo(MouseEvent e, String label) {
-		System.out.println("### " + label + " #############");
-		System.out.println(" Button = " + e.getButton());
-		System.out.println(" ClickCount = " + e.getClickCount());
-		System.out.println(" Modifiers = " + e.getModifiers());
-		System.out.println(" ModifiersEx = " + e.getModifiersEx());
-		System.out.println(" X = " + e.getX());
-		System.out.println(" Y = " + e.getY());
-		System.out.println(" XOnScreen = " + e.getXOnScreen());
-		System.out.println(" YOnScreen = " + e.getYOnScreen());
-		System.out.println(" LocationOnScreen.x = " + e.getLocationOnScreen().x);
-		System.out.println(" LocationOnScreen.y = " + e.getLocationOnScreen().y);
-		System.out.println(" Point.x = " + e.getPoint().x);
-		System.out.println(" Point.y = " + e.getPoint().y);
-		System.out.println(" Component Class = " + e.getComponent().getClass().getName());
-		System.out.println(" Source = " + e.getSource());
-	}
-
-
-/* ---------------------------------------------------------
- 	Long Mouse Press Detection
-----------------------------------------------------------*/
-	private Thread longMousePressDetectionThread;
-
-	private void startDetectingLongMousePress() {
-
-		this.longMousePressDetectionThread = new Thread(
-				() -> {
-					try {
-						Thread.sleep(1000);
-					} catch (InterruptedException e1) {
-						return;
-					}
-
-					onLongMousePressDetected();
-				});
-
-		this.longMousePressDetectionThread.start();
-
-	}
-
-	private void stopDetectingLongMousePress() {
-		if (this.longMousePressDetectionThread != null) {
-			this.longMousePressDetectionThread.interrupt();
-			this.longMousePressDetectionThread = null;
-		}
-
-	}
-
-	private void onLongMousePressDetected() {
-		System.out.println("GO !!!!!!!!!!!!!!!!!!!!");
-	}
 
 }
