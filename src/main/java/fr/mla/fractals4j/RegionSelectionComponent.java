@@ -13,22 +13,27 @@ public class RegionSelectionComponent extends JComponent{
     private int currentX;
     private int currentY;
 
+    private double aspectRatio;
 
-    public RegionSelectionComponent(int originX, int originY) {
+    public RegionSelectionComponent(int originX, int originY, double aspectRatio) {
         this.originX = originX;
         this.originY = originY;
         this.currentX = originX;
         this.currentY = originY;
 
+        this.aspectRatio = aspectRatio;
+
     }
 
     public void refreshBounds(int locationX, int locationY) {
         this.currentX = locationX;
-        this.currentY = locationY;
+        this.currentY = this.originY
+                + (int) (Math.signum(locationY - this.originY) * Math.signum(locationX - this.originX))
+                * new Double((locationX - this.originX) / this.aspectRatio).intValue();
 
         this.setBounds(
-                this.getNorthEastX(),
-                this.getNorthEastY(),
+                this.getNorthWestX(),
+                this.getNorthWestY(),
                 this.getRegionW(),
                 this.getRegionH());
 
@@ -54,11 +59,11 @@ public class RegionSelectionComponent extends JComponent{
         return (originY <= currentY ? currentY - originY : originY - currentY);
     }
 
-    public int getNorthEastX() {
+    public int getNorthWestX() {
         return (originX <= currentX ? originX : currentX);
     }
 
-    public int getNorthEastY() {
+    public int getNorthWestY() {
         return (originY <= currentY ? originY : currentY);
     }
 

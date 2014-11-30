@@ -7,7 +7,7 @@ import javax.swing.*;
 
 
 // could extend JPanel either. See what's best
-public class Fractals4jComponent extends JPanel implements MouseListener, MouseMotionListener {
+public class Fractals4jComponent extends JComponent implements MouseListener, MouseMotionListener {
 
 	private static final long serialVersionUID = 1L;
 
@@ -44,7 +44,7 @@ public class Fractals4jComponent extends JPanel implements MouseListener, MouseM
 
 
 	private void startSelectingRegion(int locationX, int locationY) {
-		this.regionSelectionComponent = new RegionSelectionComponent(locationX, locationY);
+		this.regionSelectionComponent = new RegionSelectionComponent(locationX, locationY, ((double) width) / height);
 
 		this.add(this.regionSelectionComponent);
 //		this.validate();
@@ -63,8 +63,8 @@ public class Fractals4jComponent extends JPanel implements MouseListener, MouseM
 
 		this.remove(this.regionSelectionComponent);
 		this.repaint(
-				this.regionSelectionComponent.getNorthEastX(),
-				this.regionSelectionComponent.getNorthEastY(),
+				this.regionSelectionComponent.getNorthWestX(),
+				this.regionSelectionComponent.getNorthWestY(),
 				this.regionSelectionComponent.getRegionW(),
 				this.regionSelectionComponent.getRegionH());
 		this.regionSelectionComponent = null;
