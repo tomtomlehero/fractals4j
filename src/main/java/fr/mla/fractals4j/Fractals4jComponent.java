@@ -11,14 +11,18 @@ public class Fractals4jComponent extends JComponent implements MouseListener, Mo
 
 	private static final long serialVersionUID = 1L;
 
-	private static final int width = 800;
-	private static final int height = 600;
+	private int width;
+	private int height;
 
 	private FractalView fractalView;
 
 	private RegionSelectionComponent regionSelectionComponent;
 
-	public Fractals4jComponent() {
+	public Fractals4jComponent(int width, int height) {
+
+		this.width = width;
+		this.height = height;
+
 		addMouseListener(this);
 		addMouseMotionListener(this);
 		setLayout(null);
@@ -28,7 +32,7 @@ public class Fractals4jComponent extends JComponent implements MouseListener, Mo
 	}
 
 	public Dimension getPreferredSize() {
-		return new Dimension(width, height);
+		return new Dimension(this.width, this.height);
 	}
 
 	protected void paintComponent(Graphics g) {
@@ -99,9 +103,28 @@ public class Fractals4jComponent extends JComponent implements MouseListener, Mo
 
 	}
 
-
+// TODO : aspectRatio
 	private void computeAndShowFractal() {
-		this.computeAndShowFractal(FractalView.DEFAULT_X0, FractalView.DEFAULT_X1, FractalView.DEFAULT_Y0, FractalView.DEFAULT_Y1);
+
+		double x0;
+		double x1;
+		double y0;
+		double y1;
+
+		if (((FractalView.DEFAULT_X1 - FractalView.DEFAULT_X0) * height) <= ((FractalView.DEFAULT_Y1 - FractalView.DEFAULT_Y0) * width)) {
+			y0 = FractalView.DEFAULT_Y0;
+			y1 = FractalView.DEFAULT_Y1;
+			x0 = FractalView.DEFAULT_X0 + (FractalView.DEFAULT_X1 - FractalView.DEFAULT_X0) / 2 - (FractalView.DEFAULT_Y1 - FractalView.DEFAULT_Y0) * width / (2 * height);
+			x1 = FractalView.DEFAULT_X0 + (FractalView.DEFAULT_X1 - FractalView.DEFAULT_X0) / 2 + (FractalView.DEFAULT_Y1 - FractalView.DEFAULT_Y0) * width / (2 * height);
+		} else {
+			x0 = FractalView.DEFAULT_X0;
+			x1 = FractalView.DEFAULT_X1;
+			y0 = FractalView.DEFAULT_Y0 + (FractalView.DEFAULT_Y1 - FractalView.DEFAULT_Y0) / 2 - (FractalView.DEFAULT_X1 - FractalView.DEFAULT_X0) * height / (2 * width);
+			y1 = FractalView.DEFAULT_Y0 + (FractalView.DEFAULT_Y1 - FractalView.DEFAULT_Y0) / 2 + (FractalView.DEFAULT_X1 - FractalView.DEFAULT_X0) * height / (2 * width);
+		}
+
+		System.out.println("" + x0 + " " + x1 + " " + y0 + " " + y1);
+		this.computeAndShowFractal(x0, x1, y0, y1);
 	}
 
 

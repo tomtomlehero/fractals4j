@@ -1,24 +1,17 @@
 package fr.mla.fractals4j;
 
+import fr.mla.fractals4j.algorithm.AutomaticDwellLimit;
+import fr.mla.fractals4j.algorithm.Orbit;
+
 import java.awt.image.BufferedImage;
 import java.awt.image.WritableRaster;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
-import javax.imageio.ImageIO;
 
 public class FractalView {
 
-
-	public static final double DEFAULT_X0 = -2.0;
-	public static final double DEFAULT_X1 = 1.0;
-	public static final double DEFAULT_Y0 = -1.0;
-	public static final double DEFAULT_Y1 = 1.0;
+	public static final double DEFAULT_X0 = -2.5;
+	public static final double DEFAULT_X1 = 1.5;
+	public static final double DEFAULT_Y0 = -1.5;
+	public static final double DEFAULT_Y1 = 1.5;
 
 	private double x0 = 0.0;
 	private double x1 = 0.0;
@@ -26,11 +19,10 @@ public class FractalView {
 	private double y1 = 0.0;
 	private int width = 0;
 	private int height = 0;
-	private int maxIterations = 0;
-	private String workingDirectory;
+//	private int dwellLimit = 0;
+
 
 	private int[][] divPicture;
-	private int[] divSpectrum;
 
 	private BufferedImage image;
 
@@ -41,8 +33,7 @@ public class FractalView {
 		this.y1 = y1;
 		this.width = width;
 		this.height = height;
-		this.maxIterations = maxIterations;
-		this.workingDirectory = "C:\\Users\\MHDB4820\\Desktop\\fractals4jWorkshop";
+//		this.dwellLimit = maxIterations;
 	}
 
 	public BufferedImage getImage() {
@@ -53,8 +44,10 @@ public class FractalView {
 	public void doSomething() {
 
 		divPicture = new int[width][height];
-		divSpectrum = new int[maxIterations];
 
+
+		int automaticDwellLimit = AutomaticDwellLimit.getAutomaticDwellLimit(x0, x1, y0, y1, width, height, 1000);
+		System.out.println("automatic dwell limit = " + automaticDwellLimit);
 
 		for (int j = 0; j < height; j++) {
 			for (int i = 0; i < width; i++) {
@@ -62,10 +55,9 @@ public class FractalView {
 				double xc = ((width - i) * x0 + i * x1) / width;
 				double yc = ((height - j) * y1 + j * y0) / height;
 
-				int n = computeOrbit(xc, yc);
+				int n = Orbit.process(xc, yc, automaticDwellLimit);
 
 				divPicture[i][j] = n;
-				divSpectrum[n - 1]++;
 			}
 
 		}
@@ -76,36 +68,7 @@ public class FractalView {
 	}
 
 
-	private int computeOrbit(double xc, double yc) {
 
-		int n = 0;
-		double x = 0;
-		double y = 0;
-
-		double modCsq = 0;
-
-		while ((n < maxIterations) && (modCsq < 4)) {
-			double tmpX = x * x - y * y + xc;
-			double tmpY = 2 * x * y + yc;
-			x = tmpX;
-			y = tmpY;
-			modCsq = x * x + y * y;
-			n++;
-		}
-
-		return n;
-	}
-
-
-	public void saveStat() throws IOException {
-
-		try (PrintWriter outputFile = new PrintWriter(new FileWriter(someTimeStampedFileName("stat", "txt")))) {
-			for (int n = 0; n < divSpectrum.length; n++) {
-				outputFile.println((n + 1) + "\t" + divSpectrum[n]);
-			}
-		}
-
-	}
 
 
 	public void computeImage() {
@@ -122,13 +85,6 @@ public class FractalView {
 		
 	}
 	
-	private void saveImage() throws IOException {
-
-		if (this.image != null) {
-			ImageIO.write(this.image, "PNG", new File(someTimeStampedFileName("render", "png")));
-		}
-	}
-
 
 	private int[] colorOffset(int w, int h) {
 
@@ -139,11 +95,6 @@ public class FractalView {
 		return colors[k];
 	}
 
-	private static final DateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
-
-	private String someTimeStampedFileName(String prefix, String ext) {
-		return workingDirectory + "/" + prefix + "-" + dateFormat.format(new Date()) + "." + ext;
-	}
 
 
 	public double getX0() {
