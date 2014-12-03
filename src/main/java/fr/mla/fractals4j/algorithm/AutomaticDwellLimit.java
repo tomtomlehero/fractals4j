@@ -29,7 +29,7 @@ public class AutomaticDwellLimit {
 
     // this rate is an expression for :
     // ... in such a way that most of the points in the histogram fall either...
-    private static final double threshold = 0.999;
+    private static final double threshold = 0.99;
 
 
     public static int getAutomaticDwellLimit(double x0, double x1, double y0, double y1, int width, int height) {
@@ -44,7 +44,7 @@ public class AutomaticDwellLimit {
                 double xc = ((width - i) * x0 + i * x1) / width;
                 double yc = ((height - j) * y1 + j * y0) / height;
 
-                int n = Orbit.process(xc, yc, histogramDwellLimit);
+                int n = Orbit.dwell(xc, yc, histogramDwellLimit);
 
                 dwellFrequency[n - 1]++;
                 sampleSize++;
