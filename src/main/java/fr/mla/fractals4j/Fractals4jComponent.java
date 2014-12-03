@@ -103,7 +103,8 @@ public class Fractals4jComponent extends JComponent implements MouseListener, Mo
 
 	}
 
-// TODO : aspectRatio
+	// Shows artwork with default bounds
+	// (Bounds are refined according to frame aspect ratio)
 	private void computeAndShowFractal() {
 
 		double x0;
@@ -123,7 +124,6 @@ public class Fractals4jComponent extends JComponent implements MouseListener, Mo
 			y1 = FractalView.DEFAULT_Y0 + (FractalView.DEFAULT_Y1 - FractalView.DEFAULT_Y0) / 2 + (FractalView.DEFAULT_X1 - FractalView.DEFAULT_X0) * height / (2 * width);
 		}
 
-		System.out.println("" + x0 + " " + x1 + " " + y0 + " " + y1);
 		this.computeAndShowFractal(x0, x1, y0, y1);
 	}
 

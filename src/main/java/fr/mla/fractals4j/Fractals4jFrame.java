@@ -3,6 +3,12 @@ package fr.mla.fractals4j;
 import javax.swing.*;
 import java.io.File;
 
+/*
+	Algorithms used in this soft are from Robert P. Munafo's
+	Mu-Ency - The Encyclopedia of the Mandelbrot Set
+	http://mrob.com/pub/muency.html
+*/
+
 public class Fractals4jFrame extends JFrame {
 
 	private static final long serialVersionUID = 1L;
