@@ -25,19 +25,21 @@ public class AutomaticDwellLimit {
     to automatically generate a color map.
 */
 
+    private static final int histogramDwellLimit = 5000;
 
     // this rate is an expression for :
     // ... in such a way that most of the points in the histogram fall either...
-    private static final double threshold = 0.99;
+    private static final double threshold = 0.999;
 
-    public static int getAutomaticDwellLimit(double x0, double x1, double y0, double y1, int width, int height, int histogramDwellLimit) {
+
+    public static int getAutomaticDwellLimit(double x0, double x1, double y0, double y1, int width, int height) {
 
         int[] dwellFrequency = new int[histogramDwellLimit];
 
         int sampleSize = 0;
 
-        for (int j = 0; j < height; j++) {
-            for (int i = 0; i < width; i++) {
+        for (int j = 0; j < height; j += 2) {
+            for (int i = 0; i < width; i += 2) {
 
                 double xc = ((width - i) * x0 + i * x1) / width;
                 double yc = ((height - j) * y1 + j * y0) / height;
