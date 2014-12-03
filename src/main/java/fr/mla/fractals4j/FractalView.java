@@ -2,6 +2,7 @@ package fr.mla.fractals4j;
 
 import fr.mla.fractals4j.algorithm.AutomaticDwellLimit;
 import fr.mla.fractals4j.algorithm.Orbit;
+import fr.mla.fractals4j.color.HSVtoRGB;
 
 import java.awt.image.BufferedImage;
 import java.awt.image.WritableRaster;
@@ -19,6 +20,7 @@ public class FractalView {
 	private double y1 = 0.0;
 	private int width = 0;
 	private int height = 0;
+	int automaticDwellLimit;
 //	private int dwellLimit = 0;
 
 
@@ -33,7 +35,6 @@ public class FractalView {
 		this.y1 = y1;
 		this.width = width;
 		this.height = height;
-//		this.dwellLimit = maxIterations;
 	}
 
 	public BufferedImage getImage() {
@@ -46,7 +47,7 @@ public class FractalView {
 		divPicture = new int[width][height];
 
 
-		int automaticDwellLimit = AutomaticDwellLimit.getAutomaticDwellLimit(x0, x1, y0, y1, width, height, 1000);
+		this.automaticDwellLimit = AutomaticDwellLimit.getAutomaticDwellLimit(x0, x1, y0, y1, width, height);
 		System.out.println("automatic dwell limit = " + automaticDwellLimit);
 
 		for (int j = 0; j < height; j++) {
@@ -75,9 +76,28 @@ public class FractalView {
 		BufferedImage bufferedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
 		WritableRaster raster = bufferedImage.getRaster();
 
+		float[] hsv = new float[3];
+		int[] rgb = new int[3];
+
 		for (int h = 0; h < height; h++) {
 			for (int w = 0; w < width; w++) {
-				raster.setPixel(w, h, colorOffset(w, h));
+
+				// We're inside ==> black
+				if (divPicture[w][h] == automaticDwellLimit) {
+					hsv[2] = 0.0f;
+				} else {
+					hsv[0] = 360.0f * divPicture[w][h] / automaticDwellLimit;
+					hsv[1] = 0.9f;//(1.0f * h) / height;
+					hsv[2] = 0.9f;//(1.0f * w) / width;
+				}
+				HSVtoRGB.convert(hsv, rgb);
+
+
+				// Full Color
+				raster.setPixel(w, h, rgb);
+
+				// Limited Color
+//				raster.setPixel(w, h, colorOffset(w, h));
 			}
 		}
 		
