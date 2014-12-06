@@ -1,5 +1,7 @@
 package fr.mla.fractals4j;
 
+import fr.mla.fractals4j.algorithm.Orbit;
+
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -31,6 +33,33 @@ public class FileUtil {
         }
 
     }
+
+
+
+    public static void saveComparativeDwellMapToFile(int[][] dwellMap, double[][] continuousDwellMap) {
+
+        try (PrintWriter outputFile = new PrintWriter(new FileWriter(someTimeStampedFileName("stat", "txt")))) {
+
+            int width = dwellMap.length;
+            int height = dwellMap[0].length;
+
+            for (int j = 0; j < height; j++) {
+                for (int i = 0; i < width; i++) {
+            outputFile.println("* " + j + "\t" + i + "\t" + dwellMap[i][j] + "\t" + continuousDwellMap[i][j]);
+
+                }
+
+            }
+
+
+
+        } catch (IOException e) {
+            System.out.println("Unable to save file (IOException)");
+        }
+
+    }
+
+
 
 
     public static void saveImage(BufferedImage someImage) throws IOException {

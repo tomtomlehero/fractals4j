@@ -22,18 +22,26 @@ public class Fractals4jFrame extends JFrame {
 
 	public static void main(String[] args) {
 
-		if (args.length < 3) {
+		if (args.length < 7) {
 			usage();
 		}
 
-		int widthParam = 0;
-		int heightParam = 0;
+		double defaultX0 = 0.0;
+		double defaultX1 = 0.0;
+		double defaultY0 = 0.0;
+		double defaultY1 = 0.0;
+		int width = 0;
+		int height = 0;
 		String workingDirectory = null;
 
 		try {
-			widthParam = Integer.parseInt(args[0]);
-			heightParam = Integer.parseInt(args[1]);
-			workingDirectory = args[2];
+			defaultX0 = Double.parseDouble(args[0]);
+			defaultX1 = Double.parseDouble(args[1]);
+			defaultY0 = Double.parseDouble(args[2]);
+			defaultY1 = Double.parseDouble(args[3]);
+			width = Integer.parseInt(args[4]);
+			height = Integer.parseInt(args[5]);
+			workingDirectory = args[6];
 		} catch (NumberFormatException e) {
 			usage();
 		}
@@ -43,12 +51,17 @@ public class Fractals4jFrame extends JFrame {
 			usage();
 		}
 
+		AppConst.DEFAULT_X0 = defaultX0;
+		AppConst.DEFAULT_X1 = defaultX1;
+		AppConst.DEFAULT_Y0 = defaultY0;
+		AppConst.DEFAULT_Y1 = defaultY1;
+
 		AppConst.workingDirectory = workingDirectory;
 
-		final int width = widthParam;
-		final int height = heightParam;
+		final int finalWidth = width;
+		final int finalHeight = height;
 
-		SwingUtilities.invokeLater(() -> createAndShowGUI(width, height));
+		SwingUtilities.invokeLater(() -> createAndShowGUI(finalWidth, finalHeight));
 
 	}
 

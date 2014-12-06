@@ -9,11 +9,6 @@ import java.awt.image.WritableRaster;
 
 public class FractalView {
 
-	public static final double DEFAULT_X0 = -2.5;
-	public static final double DEFAULT_X1 = 1.5;
-	public static final double DEFAULT_Y0 = -1.5;
-	public static final double DEFAULT_Y1 = 1.5;
-
 	private double x0 = 0.0;
 	private double x1 = 0.0;
 	private double y0 = 0.0;
@@ -24,14 +19,17 @@ public class FractalView {
 
 	int automaticDwellLimit;
 
-	private int[][] dweallMap;
-	private double[][] continuousDwellMap;
+	private int[][] dwellMap;
+//	private double[][] continuousDwellMap;
+
+//	private DwellMap<Integer> genericDwellMap;
+
 
 	private BufferedImage image;
 
 
 
-	public FractalView(double x0, double x1, double y0, double y1, int width, int height, int maxIterations) {
+	public FractalView(double x0, double x1, double y0, double y1, int width, int height) {
 		this.x0 = x0;
 		this.x1 = x1;
 		this.y0 = y0;
@@ -47,27 +45,35 @@ public class FractalView {
 
 	public void doSomething() {
 
-//		this.dwellMap = new int[width][height];
-		this.continuousDwellMap = new double[width][height];
+		this.dwellMap = new int[width][height];
+//		this.continuousDwellMap = new double[width][height];
 
+		System.out.println("X0 = " + this.x0);
+		System.out.println("X1 = " + this.x1);
+		System.out.println("Y0 = " + this.y0);
+		System.out.println("Y1 = " + this.y1);
 
 
 		this.automaticDwellLimit = AutomaticDwellLimit.getAutomaticDwellLimit(x0, x1, y0, y1, width, height);
 		System.out.println("automatic dwell limit = " + automaticDwellLimit);
 
+		long now = System.currentTimeMillis();
+		System.out.println("Start");
 		for (int j = 0; j < height; j++) {
 			for (int i = 0; i < width; i++) {
 
 				double xc = ((width - i) * x0 + i * x1) / width;
 				double yc = ((height - j) * y1 + j * y0) / height;
 
-//				this.dwellMap[i][j] = Orbit.dwell(xc, yc, automaticDwellLimit);
-				this.continuousDwellMap[i][j] = Orbit.continuousDwell(xc, yc, automaticDwellLimit);
+				this.dwellMap[i][j] = Orbit.dwell(xc, yc, automaticDwellLimit);
+//				this.continuousDwellMap[i][j] = Orbit.continuousDwell(xc, yc, automaticDwellLimit);
 
 			}
 
 		}
+		System.out.println("Done in " + (System.currentTimeMillis() - now) + " ms.");
 
+//		FileUtil.saveComparativeDwellMapToFile(dwellMap, continuousDwellMap);
 
 		computeImage();
 
@@ -87,27 +93,23 @@ public class FractalView {
 		for (int h = 0; h < height; h++) {
 			for (int w = 0; w < width; w++) {
 
-//				if (dwellMap[w][h] == automaticDwellLimit) { // We're inside ==> black
-//					hsv[2] = 0.0f;
-//				} else { // We're outside ==> be imaginative !!
-//					hsv[0] = 360.0f * dwellMap[w][h] / automaticDwellLimit;
-//					hsv[1] = 0.9f;//(1.0f * h) / height;
-//					hsv[2] = 0.9f;//(1.0f * w) / width;
-//				}
-
-				if (continuousDwellMap[w][h] == automaticDwellLimit) { // We're inside ==> black
+				if (dwellMap[w][h] == automaticDwellLimit) { // We're inside ==> black
 					hsv[2] = 0.0f;
 				} else { // We're outside ==> be imaginative !!
-					hsv[0] = 360.0f * (float)(continuousDwellMap[w][h] / automaticDwellLimit);
+					hsv[0] = 360.0f * dwellMap[w][h] / automaticDwellLimit;
 					hsv[1] = 0.9f;//(1.0f * h) / height;
 					hsv[2] = 0.9f;//(1.0f * w) / width;
 				}
 
-
-
+//				if (continuousDwellMap[w][h] == (double) automaticDwellLimit) { // We're inside ==> black
+//					hsv[2] = 0.0f;
+//				} else { // We're outside ==> be imaginative !!
+//					hsv[0] = 360.0f * (float)(continuousDwellMap[w][h] / automaticDwellLimit);
+//					hsv[1] = 0.9f;//(1.0f * h) / height;
+//					hsv[2] = 0.9f;//(1.0f * w) / width;
+//				}
 
 				HSVtoRGB.convert(hsv, rgb);
-
 
 				// Full Color
 				raster.setPixel(w, h, rgb);
@@ -166,3 +168,12 @@ public class FractalView {
 
 
 }
+
+//class DwellMap<T> {
+//
+//	private T[][] map;
+//
+//	public DwellMap(int width, int height) {
+//		this.map = new T[width][height];
+//	}
+//}

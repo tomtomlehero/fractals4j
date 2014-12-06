@@ -112,16 +112,16 @@ public class Fractals4jComponent extends JComponent implements MouseListener, Mo
 		double y0;
 		double y1;
 
-		if (((FractalView.DEFAULT_X1 - FractalView.DEFAULT_X0) * height) <= ((FractalView.DEFAULT_Y1 - FractalView.DEFAULT_Y0) * width)) {
-			y0 = FractalView.DEFAULT_Y0;
-			y1 = FractalView.DEFAULT_Y1;
-			x0 = FractalView.DEFAULT_X0 + (FractalView.DEFAULT_X1 - FractalView.DEFAULT_X0) / 2 - (FractalView.DEFAULT_Y1 - FractalView.DEFAULT_Y0) * width / (2 * height);
-			x1 = FractalView.DEFAULT_X0 + (FractalView.DEFAULT_X1 - FractalView.DEFAULT_X0) / 2 + (FractalView.DEFAULT_Y1 - FractalView.DEFAULT_Y0) * width / (2 * height);
+		if (((AppConst.DEFAULT_X1 - AppConst.DEFAULT_X0) * height) <= ((AppConst.DEFAULT_Y1 - AppConst.DEFAULT_Y0) * width)) {
+			y0 = AppConst.DEFAULT_Y0;
+			y1 = AppConst.DEFAULT_Y1;
+			x0 = AppConst.DEFAULT_X0 + (AppConst.DEFAULT_X1 - AppConst.DEFAULT_X0) / 2 - (AppConst.DEFAULT_Y1 - AppConst.DEFAULT_Y0) * width / (2 * height);
+			x1 = AppConst.DEFAULT_X0 + (AppConst.DEFAULT_X1 - AppConst.DEFAULT_X0) / 2 + (AppConst.DEFAULT_Y1 - AppConst.DEFAULT_Y0) * width / (2 * height);
 		} else {
-			x0 = FractalView.DEFAULT_X0;
-			x1 = FractalView.DEFAULT_X1;
-			y0 = FractalView.DEFAULT_Y0 + (FractalView.DEFAULT_Y1 - FractalView.DEFAULT_Y0) / 2 - (FractalView.DEFAULT_X1 - FractalView.DEFAULT_X0) * height / (2 * width);
-			y1 = FractalView.DEFAULT_Y0 + (FractalView.DEFAULT_Y1 - FractalView.DEFAULT_Y0) / 2 + (FractalView.DEFAULT_X1 - FractalView.DEFAULT_X0) * height / (2 * width);
+			x0 = AppConst.DEFAULT_X0;
+			x1 = AppConst.DEFAULT_X1;
+			y0 = AppConst.DEFAULT_Y0 + (AppConst.DEFAULT_Y1 - AppConst.DEFAULT_Y0) / 2 - (AppConst.DEFAULT_X1 - AppConst.DEFAULT_X0) * height / (2 * width);
+			y1 = AppConst.DEFAULT_Y0 + (AppConst.DEFAULT_Y1 - AppConst.DEFAULT_Y0) / 2 + (AppConst.DEFAULT_X1 - AppConst.DEFAULT_X0) * height / (2 * width);
 		}
 
 		this.computeAndShowFractal(x0, x1, y0, y1);
@@ -131,7 +131,7 @@ public class Fractals4jComponent extends JComponent implements MouseListener, Mo
 	private void computeAndShowFractal(double x0, double x1, double y0, double y1) {
 
 		SwingUtilities.invokeLater(() -> {
-			fractalView = new FractalView(x0, x1, y0, y1, width, height, 200);
+			fractalView = new FractalView(x0, x1, y0, y1, width, height);
 			fractalView.doSomething();
 			repaint();
 		});

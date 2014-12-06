@@ -1,5 +1,6 @@
 package fr.mla.fractals4j.algorithm;
 
+import fr.mla.fractals4j.AppConst;
 import fr.mla.fractals4j.FileUtil;
 
 /**
@@ -25,11 +26,11 @@ public class AutomaticDwellLimit {
     to automatically generate a color map.
 */
 
-    private static final int histogramDwellLimit = 5000;
+    private static final int histogramDwellLimit = AppConst.HISTOGRAM_DWELL_LIMIT;
 
     // this rate is an expression for :
     // ... in such a way that most of the points in the histogram fall either...
-    private static final double threshold = 0.99;
+    private static final double threshold = AppConst.AUTOMATIC_DWELL_THRESHOLD;
 
 
     public static int getAutomaticDwellLimit(double x0, double x1, double y0, double y1, int width, int height) {
@@ -38,8 +39,8 @@ public class AutomaticDwellLimit {
 
         int sampleSize = 0;
 
-        for (int j = 0; j < height; j += 2) {
-            for (int i = 0; i < width; i += 2) {
+        for (int j = 0; j < height; j += 5) {
+            for (int i = 0; i < width; i += 5) {
 
                 double xc = ((width - i) * x0 + i * x1) / width;
                 double yc = ((height - j) * y1 + j * y0) / height;
@@ -52,11 +53,11 @@ public class AutomaticDwellLimit {
 
         }
 
-        FileUtil.saveIntArrayToFile(dwellFrequency);
+//        FileUtil.saveIntArrayToFile(dwellFrequency);
 
         // ... or did not escape at all...
         int keepInSample = dwellFrequency[histogramDwellLimit - 1];
-        System.out.println("Did not escape at all : " + keepInSample);
+
         // ... fall either below this optimum value...
         for (int d = 0; d < histogramDwellLimit - 1; d++) {
             keepInSample += dwellFrequency[d];
